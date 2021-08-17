@@ -71,7 +71,7 @@ public class BbsDAO {
 	}
 	
 	public ArrayList<Bbs> getList(int pageNumber) { //특정한 리스트를 담아 반환할 수 있도록 한다.
-		String SQL = "SELECT * FROM BBS WHERE bbsID < AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
 		ArrayList<Bbs> list= new ArrayList<Bbs>(); //Bbs클래스에서 나오는 인스턴스를 보관할 수 있는 list
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL); //SQL을 실행 준비단계로 만들어준다.
@@ -88,13 +88,14 @@ public class BbsDAO {
 				list.add(bbs);
 			}
 		}catch (Exception e) {
+			
 			e.printStackTrace();
 		}
 		return list; //10개를 뽑아온 게시글 리스트가 list에 담겨 반환이 된다.
 	}
 	
 	public boolean nextPage(int pageNumber) { // 게시글이 9개일 때 페이지는 1개, 게시글이 11개면 페이지는 2개
-		String SQL = "SELECT * FROM BBS WHERE bbsID < AND bbsAvailable = 1";
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL); 
 			pstmt.setInt(1, getNext() - (pageNumber -1) * 10);
@@ -106,6 +107,28 @@ public class BbsDAO {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public Bbs getBbs(int bbsID) {
+		String SQL = "SELECT * FROM BBS WHERE bbsID = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL); 
+			pstmt.setInt(1, bbsID);
+			rs = pstmt.executeQuery(); 
+			if(rs.next()) { 
+				Bbs bbs = new Bbs();
+				bbs.setBbsID(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5));
+				bbs.setBbsAvailable(rs.getInt(6));
+				return bbs;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }
