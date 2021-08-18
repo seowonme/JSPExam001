@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="wide=device-width", initial-scale="1">
 <link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/custom.css">
 <title>JSP 게시판 웹사이트</title>
 </head>
 <body>
@@ -106,7 +107,18 @@
              %>
              </tbody>
           </table>
-          <a href="write.jsp" class="btn btn-primary pull-rigth">글쓰기</a>
+          <% 
+             if(pageNumber != 1){
+          %>
+             <a href="bbs.jsp?pageNumber=<%= pageNumber - 1 %>" class="btn btn-success btn-arraw-left">이전</a>
+          <% 	 
+             }if(bbsDAO.nextPage(pageNumber + 1)){
+          %>
+             <a href="bbs.jsp?pageNumber=<%= pageNumber + 1 %>" class="btn btn-success btn-arraw-left">다음</a>
+          <% 	 
+             }
+          %>
+          <a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>

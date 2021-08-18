@@ -38,7 +38,7 @@ public class BbsDAO {
 		return ""; //데이터베이스 오류
 	}
 	
-	public int getNext() { //현재의 시간을 가져오는 함수
+	public int getNext() { 
 		String SQL = "SELECT bbsID FROM BBS ORDER BY bbsID DESC"; //내침차순을 해서 가장 마지막에 쓰인 글을 가져옴
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL); //SQL을 실행 준비단계로 만들어준다.
@@ -98,7 +98,7 @@ public class BbsDAO {
 		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL); 
-			pstmt.setInt(1, getNext() - (pageNumber -1) * 10);
+			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);
 			rs = pstmt.executeQuery(); 
 			if(rs.next()) { 
 				return true;
@@ -129,6 +129,32 @@ public class BbsDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		String SQL = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?"; //특정한 아이디에 해당하는 제목과 내용을 바꾸겠다.
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL); //SQL을 실행 준비단계로 만들어준다.
+			pstmt.setString(1, bbsTitle); 
+			pstmt.setString(2, bbsContent);
+			pstmt.setInt(3, bbsID); //
+			return pstmt.executeUpdate(); //
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1; //데이터베이스 오류
+	}
+	
+	public int delete(int bbsID) {
+		String SQL = "UPDATE BBS SET bbsAvailable = 0 WHERE bbsID = ?"; //글을 삭제하더라도 글에 대한 정보가 남아있을 수 있게
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL); //SQL을 실행 준비단계로 만들어준다.
+			pstmt.setInt(1, bbsID); 
+			return pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1; //데이터베이스 오류
 	}
 	
 }
