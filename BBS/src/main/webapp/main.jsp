@@ -77,7 +77,7 @@
            <div class="container">
                <h1>웹 사이트 소개</h1>
                <p>이 웹 사이트는 부트스트랩으로 만든 JSP 웹 사이트입니다. 로그인 기능과 게시판 수정, 삭제 기능을 구현하였습니다.</p>
-               <p><a class="btn btn-primary btn-pull" href="#">자세히 알아보기</a></p>
+               <p><a class="btn btn-primary btn-pull" href="https://github.com/seowonme/JSPExam001">GitHub로 이동</a></p>
            </div>
         </div>
      </div>
